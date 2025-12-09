@@ -72,3 +72,18 @@ class ResponseMessages:             # as message
     UNAUTHORIZED            = 'You should be authorised'
     EMAIL_ALREADY_EXISTS    = 'User with such email already exists'
     NO_INGREDIENTS          = 'Ingredient ids must be provided'
+
+def create_burger(buns_list, fillings_list, sauces_list):
+    """Создает список ID ингредиентов для бургера"""
+    ingredients_list = [
+        buns_list[0][ResponseKeys.ID_KEY],
+        fillings_list[0][ResponseKeys.ID_KEY],
+        sauces_list[0][ResponseKeys.ID_KEY],
+    ]
+    return ingredients_list
+
+
+def init_teardown(to_teardown_flag, auth_token_value):
+    """Сохраняет данные для удаления пользователя после тестов"""
+    # Эта функция может просто возвращать значения
+    return to_teardown_flag, auth_token_value
