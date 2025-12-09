@@ -4,52 +4,44 @@ import allure
 from data import StatusCodes as CODE
 from data import ResponseKeys as KEYS
 from data import ResponseMessages as message
+from data import init_teardown  # ← НОВЫЙ ИМПОРТ
+
 from helpers.helpers_check_response import HelpersOnCheck as c
 from helpers.helpers_create_user import HelpersOnCreateUser as u
 
 
-@pytest.fixture
-@allure.title('Инициализируем данные пользователя для удаления после завершения работы')
-def setup_user():
-    # Инициализируем данные пользователя для удаления после завершения работы
-    TestCreateUser.to_teardown = False
-    TestCreateUser.auth_token = None
-
-    yield
-    # Удаляем созданного пользователя
-    if TestCreateUser.to_teardown:
-        u.try_to_delete_user(TestCreateUser.auth_token)
-
-
 class TestCreateUser:
-
-    to_teardown = False  # Выполнять удаление созданного пользователя
-    auth_token = None
 
     @allure.title('Сохраняем полученные данные пользователя для удаления после завершения работы')
     def __init_teardown(self, auth_token):
-        TestCreateUser.to_teardown = True
-        TestCreateUser.auth_token = auth_token
+        # Используем функцию из data.py
+        return init_teardown(True, auth_token)
 
 
     @allure.title('Проверка создания пользователя - регистрация уникального пользователя')
-    def test_create_user_new_user(self, setup_user):
+    def test_create_user_new_user(self, setup_user_teardown):
+        # получаем фикстуру
+        to_teardown, auth_token = setup_user_teardown
+        
         # генерируем уникальные данные нового пользователя: email, password, user_name
         user_data = u.generate_random_user_data()
         # отправляем запрос на создание пользователя и проверяем полученные данные
         auth_token, refresh_token = u.create_and_check_user(user_data)
         # сохраняем полученные данные пользователя для удаления
-        self.__init_teardown(auth_token)
+        to_teardown, auth_token = self.__init_teardown(auth_token)
 
 
     @allure.title('Проверка создания пользователя - повторная регистрация пользователя')
-    def test_create_user_double_user_error(self, setup_user):
+    def test_create_user_double_user_error(self, setup_user_teardown):
+        # получаем фикстуру
+        to_teardown, auth_token = setup_user_teardown
+        
         # генерируем уникальные данные нового пользователя: email, password, user_name
         user_data = u.generate_random_user_data()
         # отправляем запрос на создание пользователя
         auth_token, refresh_token = u.create_user(user_data)
         # сохраняем полученные данные пользователя
-        self.__init_teardown(auth_token)
+        to_teardown, auth_token = self.__init_teardown(auth_token)
         # отправляем повторный запрос на создание того же пользователя
         response = u.try_to_create_user(user_data)
 
