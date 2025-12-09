@@ -1,25 +1,23 @@
-class Endpoints:                        # as e
-    # URL-адрес сервера
-    SERVER_URL = 'https://stellarburgers.nomoreparties.site/api'
+from urls import SERVER_URL 
     # Эндпойнты (ручки) запросов к API
-    CREATE_USER = '/api/auth/register'      # Регистрация пользователя: POST '/api/auth/register'
-    LOGIN_USER = '/api/auth/login'          # Авторизация пользователя: POST '/api/auth/login'
-    LOGOUT_USER = '/api/auth/logout'        # Выход из системы: POST '/api/auth/logout', body={"token": "{{refreshToken}}"}
-    DELETE_USER = '/api/auth/user'          # Удаление пользователя: DELETE '/api/auth/user'
+CREATE_USER = SERVER_URL + '/api/auth/register'      # Регистрация пользователя: POST '/api/auth/register'
+LOGIN_USER = SERVER_URL + '/api/auth/login'          # Авторизация пользователя: POST '/api/auth/login'
+LOGOUT_USER = SERVER_URL + '/api/auth/logout'        # Выход из системы: POST '/api/auth/logout', body={"token": "{{refreshToken}}"}
+DELETE_USER = SERVER_URL + '/api/auth/user'          # Удаление пользователя: DELETE '/api/auth/user'
                                             # headers={"Authorization": "Bearer {auth_token}"}
-    GET_USER_DATA = '/api/auth/user'        # Получение данных пользователя: GET '/api/auth/user'
-    UPDATE_USER = '/api/auth/user'          # Обновление данных пользователя: PATCH '/api/auth/user'
-    GET_INGREDIENTS = '/api/ingredients'    # GET '/api/ingredients'
+GET_USER_DATA = SERVER_URL + '/api/auth/user'        # Получение данных пользователя: GET '/api/auth/user'
+UPDATE_USER = SERVER_URL + '/api/auth/user'          # Обновление данных пользователя: PATCH '/api/auth/user'
+GET_INGREDIENTS = SERVER_URL + '/api/ingredients'    # GET '/api/ingredients'
                                             # ответ: {'success': True, 'data': [{...}, ... ]
-    CREATE_ORDER = '/api/orders'            # POST '/api/orders', payload={ "ingredients": ["...","...", ...] }
+CREATE_ORDER = SERVER_URL + '/api/orders'            # POST '/api/orders', payload={ "ingredients": ["...","...", ...] }
                                             # ответ: { "name": "...","order": { "number": 6257 }, "success": true }
-    GET_USER_ORDERS = '/api/orders'         # GET '/api/orders' (50 последних заказов)
+GET_USER_ORDERS = SERVER_URL + '/api/orders'         # GET '/api/orders' (50 последних заказов)
 
-    RESET_PASSWORD = '/api/password-reset/reset'    # POST '/api/password-reset/reset'
+RESET_PASSWORD = SERVER_URL + '/api/password-reset/reset'    # POST '/api/password-reset/reset'
                                             # { "password": "", "token": "" }
-    UPDATE_TOKEN = '/api/auth/token'        # Обновление токена: POST '/api/auth/token'
+UPDATE_TOKEN = SERVER_URL + '/api/auth/token'        # Обновление токена: POST '/api/auth/token'
 
-    ACCESS_TOKEN_PREFIX = 'Bearer '
+ACCESS_TOKEN_PREFIX = 'Bearer '
 
 
 class StatusCodes:                  # as CODE
